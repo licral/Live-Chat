@@ -1,6 +1,25 @@
-form{
+#chat-panel{
     bottom: 20px;
-    left: 20px;
-    right: 20px;
     position: fixed;
+    margin: 0px 20px 0 20px;
+}
+
+#login-panel{
+    margin: auto;
+    width: 50%;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    position: absolute;
+}
+
+ul{
+    list-style-type: none;
+    margin: 10px;
+    padding: 0;
+}
+
+li{
+    padding: 5px;
 }

@@ -3,23 +3,72 @@
 <head>
     <title>Socket.IO chat</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="/css/style.css">
+    <link rel="stylesheet" type="text/css" href="css/style.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+    <script>
+        $(document).ready(function () {
+            var socket = io();
+            $('#chat-panel').hide();
+
+            $('#login').click(function(){
+                var name = $('#user-input').val();
+                if(name != ''){
+                    socket.emit('join', name);
+                    $('#login-panel').detach();
+                    $('#chat-panel').show();
+                }
+            });
+
+            $('#send').click(function(){
+                var msg = $('#message-input').val();
+                if(msg != ''){
+                    socket.emit('send', msg);
+                    $('#message-input').val('');
+                }
+            });
+
+            socket.on('update', function(msg){
+                $('#messages').append('<li><b>' + msg + '</b></li>');
+            });
+
+            socket.on('chat', function(user, msg){
+                $('#messages').append('<li><b>' + user + '</b>: ' + msg + '</li>');
+            });
+
+//            $('form').submit(function(){
+//                socket.emit('chat message', $('#message-input').val());
+//                $('#message-input').val('');
+//                return false;
+//            });
+//            socket.on('chat message', function(msg){
+//                $('#messages').append($('<li>').text("Message: " + msg));
+//            });
+        });
+    </script>
 </head>
 <body>
 <div>
+    <div id="login-panel" class="input-group">
+        <input id="user-input" type="text" class="form-control" placeholder="Please Enter a Nickname">
+        <span class="input-group-btn">
+            <button id="login" class="btn btn-default" type="button">Login</button>
+        </span>
+    </div>
+
     <div>
         <ul id="messages"></ul>
     </div>
-    <form action="">
-        <div class="input-group">
-            <input id="message-input" type="text" class="form-control" placeholder="Enter Message...">
-            <span class="input-group-btn">
-                <button class="btn btn-default" type="button">Send</button>
-            </span>
-        </div>
-    </form>
+
+    <div id="chat-panel" class="input-group">
+        <input id="message-input" type="text" class="form-control" placeholder="Enter Message...">
+        <span class="input-group-btn">
+            <button id="send" class="btn btn-default" type="button">Send</button>
+        </span>
+    </div>
 </div>
 </body>
 </html>
