@@ -7,11 +7,17 @@
 #login-panel{
     margin: auto;
     width: 50%;
+    height: max-content;
     top: 0;
     bottom: 0;
     left: 0;
     right: 0;
     position: absolute;
+}
+
+#error-message{
+    padding: 5px;
+    font-weight: bold;
 }
 
 ul{

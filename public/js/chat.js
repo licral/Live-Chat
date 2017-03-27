@@ -1,35 +1,47 @@
 $(document).ready(function () {
     var socket = io();
     var ready = false;
-    $('#chat-panel').hide();
+    $('body').load('login_page.html');
 
-    $('#login').click(function(){
+    $(document).on('click', '#login', function () {
         var name = $('#user-input').val();
-        if(name != ''){
+        if (name != '') {
             socket.emit('join', name);
-            $('#login-panel').detach();
-            $('#chat-panel').show();
-            ready = true;
         }
     });
 
-    $('#send').click(function(){
-        var msg = $('#message-input').val();
-        if(msg != ''){
-            socket.emit('send', msg);
-            $('#message-input').val('');
-        }
+    socket.on('join', function(msg){
+        $('#error-message').html(msg);
     });
 
-    socket.on('update', function(msg){
-        if(ready == true){
-            $('#messages').append('<li><b>' + msg + '</b></li>');
-        }
-    });
+    // $('button').on('click', '.login', function(){
+    //     var name = $('#user-input').val();
+    //     console.log(name);
+    //     if(name != ''){
+    //         socket.emit('join', name);
+    //         $('#login-panel').detach();
+    //         $('#chat-panel').show();
+    //         ready = true;
+    //     }
+    // });
 
-    socket.on('chat', function(user, msg){
-        if(ready == true){
-            $('#messages').append('<li><b>' + user + '</b>: ' + msg + '</li>');
-        }
-    });
+    // $('#send').click(function(){
+    //     var msg = $('#message-input').val();
+    //     if(msg != ''){
+    //         socket.emit('send', msg);
+    //         $('#message-input').val('');
+    //     }
+    // });
+    //
+    // socket.on('update', function(msg){
+    //     if(ready == true){
+    //         $('#messages').append('<li><b>' + msg + '</b></li>');
+    //     }
+    // });
+    //
+    // socket.on('chat', function(user, msg){
+    //     if(ready == true){
+    //         $('#messages').append('<li><b>' + user + '</b>: ' + msg + '</li>');
+    //     }
+    // });
 });
