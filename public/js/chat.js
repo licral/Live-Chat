@@ -10,38 +10,35 @@ $(document).ready(function () {
         }
     });
 
-    socket.on('join', function(msg){
+    socket.on('join', function (msg) {
         $('#error-message').html(msg);
     });
 
-    // $('button').on('click', '.login', function(){
-    //     var name = $('#user-input').val();
-    //     console.log(name);
-    //     if(name != ''){
-    //         socket.emit('join', name);
-    //         $('#login-panel').detach();
-    //         $('#chat-panel').show();
-    //         ready = true;
-    //     }
-    // });
+    socket.on('success', function (msg) {
+        $('body').load('chat_page.html', function () {
+            console.log('body loaded');
+            $('#messages').append('<li><b>' + msg + '</b></li>');
+        });
+    });
 
-    // $('#send').click(function(){
-    //     var msg = $('#message-input').val();
-    //     if(msg != ''){
-    //         socket.emit('send', msg);
-    //         $('#message-input').val('');
-    //     }
-    // });
-    //
-    // socket.on('update', function(msg){
-    //     if(ready == true){
-    //         $('#messages').append('<li><b>' + msg + '</b></li>');
-    //     }
-    // });
-    //
-    // socket.on('chat', function(user, msg){
-    //     if(ready == true){
-    //         $('#messages').append('<li><b>' + user + '</b>: ' + msg + '</li>');
-    //     }
+    socket.on('update', function (msg) {
+        $('#messages').append('<li><b>' + msg + '</b></li>');
+    });
+
+    $(document).on('click', '#send', function () {
+        var msg = $('#message-input').val();
+        if (msg != '') {
+            socket.emit('send', msg);
+            $('#message-input').val('');
+        }
+    });
+
+    socket.on('chat', function (user, msg) {
+        $('#messages').append('<li><b>' + user + '</b>: ' + msg + '</li>');
+    });
+
+    // socket.on('disconnect', function(){
+    //     location.reload();
+    //     $('#error-message').html("Server is down");
     // });
 });

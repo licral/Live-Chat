@@ -18,10 +18,9 @@ http.listen(3000, function () {
 io.on('connection', function(socket){
     socket.on('join', function(name){
         if(isValidUser(name)){
-            console.log(name + " Has joined");
             people[socket.id] = name;
-            socket.emit('update', 'You have connected to the chat');
-            // io.emit('update', name + ' has joined the chat');
+            socket.emit('success', 'You have connected to the chat');
+            io.emit('update', name + ' has joined the chat');
         } else{
            socket.emit('join', 'Sorry this name is already taken. Please choose another one.');
         }
@@ -32,14 +31,16 @@ io.on('connection', function(socket){
     });    
 
     socket.on('disconnect', function(){
-        io.emit('update', people[socket.id] + ' has left the chat');
-        delete people[socket.id];
+        if(people[socket.id] !== undefined){
+            io.emit('update', people[socket.id] + ' has left the chat');
+            delete people[socket.id];
+        }
     });
 });
 
 function isValidUser(name){
     for(i in people){
-        if(people[i]){
+        if(people[i] === name){
             return false;
         }
     }
